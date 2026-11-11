@@ -4,14 +4,15 @@
 <link rel="manifest" href="/website/favicon/site.webmanifest?v=1793354824089" />
 <meta name="theme-color" content="#ffffff" />
 <style>
-/* Parallax of the photo backgrounds, as on the original site: the image is taller than
-   its frame and moves slower than the page (see the script at the end of the body). */
+/* Fixed photo backgrounds, as on the original site (background-attachment: fixed), done with a
+   small script so that it also works on iOS: the image is pinned to the screen while its section
+   scrolls over it (see the end of the body). */
 .po-hero__bg img.po-parallax, .po-bg img.po-parallax {
-  position: absolute; left: 0; top: -15%; width: 100%; height: 130%;
+  position: absolute; left: 0; top: 0; width: 100%; height: 100vh;
   object-fit: cover; will-change: transform;
 }
 @media (prefers-reduced-motion: reduce) {
-  .po-hero__bg img.po-parallax, .po-bg img.po-parallax { top: 0; height: 100%; transform: none !important; }
+  .po-hero__bg img.po-parallax, .po-bg img.po-parallax { height: 100%; transform: none !important; }
 }
 </style>
 <style data-cms-embed-styles>
@@ -66,7 +67,7 @@ Suis-nous sur <a href="https://www.facebook.com/pongorchestra">Facebook</a> et s
     if (t) { history.replaceState(null, "", "#videos"); t.scrollIntoView(); }
   }
 })();
-/* Parallax: each photo background drifts by up to 15% of its frame while it crosses the screen. */
+/* Fixed backgrounds: each photo keeps the screen's height and stays put while its section moves. */
 (function () {
   if (window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches) return;
   var imgs = [].slice.call(document.querySelectorAll(".po-hero__bg img, .po-section--photo > .po-bg img, .po-band--photo > .po-bg img"));
@@ -79,10 +80,8 @@ Suis-nous sur <a href="https://www.facebook.com/pongorchestra">Facebook</a> et s
     imgs.forEach(function (img) {
       var box = img.parentNode.getBoundingClientRect();
       if (box.bottom < 0 || box.top > vh) return;
-      /* -0.5 when the frame enters at the bottom, +0.5 when it leaves at the top */
-      var progress = (vh / 2 - (box.top + box.height / 2)) / (vh + box.height);
-      var shift = progress * box.height * 0.3;
-      img.style.transform = "translate3d(0," + shift.toFixed(1) + "px,0)" + (img.closest(".po-hero__bg") ? " scale(1.04)" : "");
+      img.style.height = vh + "px";
+      img.style.transform = "translate3d(0," + (-box.top).toFixed(1) + "px,0)";
     });
   }
   window.addEventListener("scroll", function () { if (!pending) { pending = true; requestAnimationFrame(update); } }, { passive: true });
