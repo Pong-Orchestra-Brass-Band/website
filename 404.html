@@ -4,9 +4,8 @@
 <link rel="manifest" href="/website/favicon/site.webmanifest?v=1793354824089" />
 <meta name="theme-color" content="#ffffff" />
 <style>
-/* Fixed photo backgrounds, as on the original site (background-attachment: fixed), done with a
-   small script so that it also works on iOS: the image is pinned to the screen while its section
-   scrolls over it (see the end of the body). */
+/* Parallax of the photo backgrounds, as on the original site, done with a small script so that
+   it also works on iOS: the image follows the page at a lower speed (see the end of the body). */
 .po-hero__bg img.po-parallax, .po-bg img.po-parallax {
   position: absolute; left: 0; top: 0; width: 100%; height: 100vh;
   object-fit: cover; will-change: transform;
@@ -32,8 +31,10 @@
     if (t) { history.replaceState(null, "", "#videos"); t.scrollIntoView(); }
   }
 })();
-/* Fixed backgrounds: each photo keeps the screen's height and stays put while its section moves. */
+/* Parallax: the photo follows the page at a fraction of its speed. PIN = 1 keeps it fixed on the
+   screen (the original's background-attachment: fixed), 0 scrolls it with the page. */
 (function () {
+  var PIN = 0.5;
   if (window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches) return;
   var imgs = [].slice.call(document.querySelectorAll(".po-hero__bg img, .po-section--photo > .po-bg img, .po-band--photo > .po-bg img"));
   if (!imgs.length) return;
@@ -45,8 +46,9 @@
     imgs.forEach(function (img) {
       var box = img.parentNode.getBoundingClientRect();
       if (box.bottom < 0 || box.top > vh) return;
-      img.style.height = vh + "px";
-      img.style.transform = "translate3d(0," + (-box.top).toFixed(1) + "px,0)";
+      /* Tall enough to cover what is visible of the frame at every position. */
+      img.style.height = Math.ceil(vh + box.height * (1 - PIN)) + "px";
+      img.style.transform = "translate3d(0," + (-box.top * PIN).toFixed(1) + "px,0)";
     });
   }
   window.addEventListener("scroll", function () { if (!pending) { pending = true; requestAnimationFrame(update); } }, { passive: true });
