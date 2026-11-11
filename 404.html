@@ -8,7 +8,7 @@
    it also works on iOS: the image follows the page at a lower speed (see the end of the body). */
 .po-hero__bg img.po-parallax, .po-bg img.po-parallax {
   position: absolute; left: 0; top: 0; width: 100%; height: 100vh;
-  object-fit: cover; will-change: transform;
+  object-fit: cover; will-change: transform; backface-visibility: hidden; transform: translate3d(0, 0, 0);
 }
 @media (prefers-reduced-motion: reduce) {
   .po-hero__bg img.po-parallax, .po-bg img.po-parallax { height: 100%; transform: none !important; }
@@ -34,25 +34,30 @@
 /* Parallax: the photo follows the page at a fraction of its speed. PIN = 1 keeps it fixed on the
    screen (the original's background-attachment: fixed), 0 scrolls it with the page. */
 (function () {
-  var PIN = 0.5;
+  var PIN = 0.3;
   if (window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches) return;
   var imgs = [].slice.call(document.querySelectorAll(".po-hero__bg img, .po-section--photo > .po-bg img, .po-band--photo > .po-bg img"));
   if (!imgs.length) return;
-  imgs.forEach(function (img) { img.classList.add("po-parallax"); });
-  var pending = false;
+  var frames = imgs.map(function (img) { img.classList.add("po-parallax"); return img.parentNode; });
+  var vh = 0, pending = false;
+  function size() {
+    /* Sizes change only here, never while scrolling: no layout work in the scroll loop. */
+    vh = window.innerHeight;
+    var heights = frames.map(function (f) { return f.offsetHeight; });
+    imgs.forEach(function (img, i) { img.style.height = Math.ceil(vh + heights[i] * (1 - PIN)) + "px"; });
+    update();
+  }
   function update() {
     pending = false;
-    var vh = window.innerHeight;
-    imgs.forEach(function (img) {
-      var box = img.parentNode.getBoundingClientRect();
-      if (box.bottom < 0 || box.top > vh) return;
-      /* Tall enough to cover what is visible of the frame at every position. */
-      img.style.height = Math.ceil(vh + box.height * (1 - PIN)) + "px";
-      img.style.transform = "translate3d(0," + (-box.top * PIN).toFixed(1) + "px,0)";
+    /* All reads first, then all writes. */
+    var tops = frames.map(function (f) { var b = f.getBoundingClientRect(); return b.bottom < 0 || b.top > vh ? null : b.top; });
+    tops.forEach(function (top, i) {
+      if (top !== null) imgs[i].style.transform = "translate3d(0," + (-top * PIN).toFixed(1) + "px,0)";
     });
   }
   window.addEventListener("scroll", function () { if (!pending) { pending = true; requestAnimationFrame(update); } }, { passive: true });
-  window.addEventListener("resize", update);
-  update();
+  window.addEventListener("resize", size);
+  window.addEventListener("load", size);
+  size();
 })();
 </script><script src="/website/search.js" defer></script></body></html>
