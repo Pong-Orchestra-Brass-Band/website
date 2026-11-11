@@ -4,8 +4,8 @@ window.__AGENTCMS_CONFIG__ = {
   "backend": "markdown-git",
   "git": {
     "provider": "github",
-    "owner": "whynotlinux",
-    "repo": "pong-orchestra-content",
+    "owner": "Pong-Orchestra-Brass-Band",
+    "repo": "website-content",
     "branch": "main",
     "contentDir": ""
   }
