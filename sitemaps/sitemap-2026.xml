@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?xml-stylesheet type="text/xsl" href="https://pong-orchestra-brass-band.github.io/website/sitemaps/sitemap.xsl"?>
+<?xml-stylesheet type="text/xsl" href="https://pongorchestra.fr/sitemaps/sitemap.xsl"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://pong-orchestra-brass-band.github.io/website/fetes-de-bayonne-2023.html</loc>
-    <lastmod>2026-10-30</lastmod>
+    <loc>https://pongorchestra.fr/fetes-de-bayonne-2023.html</loc>
+    <lastmod>2026-11-14</lastmod>
   </url>
   <url>
-    <loc>https://pong-orchestra-brass-band.github.io/website/fete-de-la-musique-2024.html</loc>
-    <lastmod>2026-10-30</lastmod>
+    <loc>https://pongorchestra.fr/fete-de-la-musique-2024.html</loc>
+    <lastmod>2026-11-14</lastmod>
   </url>
   <url>
-    <loc>https://pong-orchestra-brass-band.github.io/website/fetes-de-bayonne-2024.html</loc>
-    <lastmod>2026-10-30</lastmod>
+    <loc>https://pongorchestra.fr/fetes-de-bayonne-2024.html</loc>
+    <lastmod>2026-11-14</lastmod>
   </url>
   <url>
-    <loc>https://pong-orchestra-brass-band.github.io/website/release-party-2025.html</loc>
-    <lastmod>2026-10-30</lastmod>
+    <loc>https://pongorchestra.fr/release-party-2025.html</loc>
+    <lastmod>2026-11-14</lastmod>
   </url>
   <url>
-    <loc>https://pong-orchestra-brass-band.github.io/website/</loc>
-    <lastmod>2026-10-30</lastmod>
+    <loc>https://pongorchestra.fr/</loc>
+    <lastmod>2026-11-14</lastmod>
   </url>
 </urlset>
